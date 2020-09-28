@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.daimler.sechub.feature_0.1.2.jar" id="com.daimler.sechub.feature" version="0.1.2">
+      <category name="com.daimler.sechub.category.alpha"/>
+   </feature>
+   <category-def name="com.daimler.sechub.category.alpha" label="Alpha">
+      <description>
+         Alpha versions.
+      </description>
+   </category-def>
+</site>
