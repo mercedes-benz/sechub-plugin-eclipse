@@ -2,7 +2,7 @@
 <feature
       id="com.daimler.sechub.feature"
       label="Sechub eclipse feature"
-      version="0.1.2"
+      version="0.2.0"
       provider-name="Daimler TSS GmbH">
 
    <description url="https://github.com/daimler/sechub-plugin-eclipse">
