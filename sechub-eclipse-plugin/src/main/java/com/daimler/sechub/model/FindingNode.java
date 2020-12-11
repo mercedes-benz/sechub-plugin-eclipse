@@ -17,6 +17,7 @@ public class FindingNode implements Comparable<FindingNode> {
 	private FindingNode parent = null;
 	private List<FindingNode> children = new LinkedList<FindingNode>();
 
+	private Integer cweId;
 	private String description;
 	private String location;
 	private Integer line;
@@ -51,6 +52,7 @@ public class FindingNode implements Comparable<FindingNode> {
 		private String relevantPart;
 		private String source;
 		private Severity severity;
+		private Integer cweId;
 
 		private FindingNodeBuilder() {
 
@@ -101,10 +103,16 @@ public class FindingNode implements Comparable<FindingNode> {
 			return this;
 		}
 
+		public FindingNodeBuilder setCweId(Integer cweId) {
+			this.cweId=cweId;
+			return this;
+		}
+		
 		public FindingNode build() {
 			FindingNode node = new FindingNode(description, location, line, column, relevantPart, source, severity);
 			node.callStackStep = callStackStep;
 			node.id = id;
+			node.cweId=cweId;
 
 			calculateFileNameAndPath(node);
 
@@ -129,6 +137,7 @@ public class FindingNode implements Comparable<FindingNode> {
 				node.fileName = location.substring(lastIndex + 1);
 			}
 		}
+
 
 	}
 
@@ -193,6 +202,10 @@ public class FindingNode implements Comparable<FindingNode> {
 
 	public int getId() {
 		return id;
+	}
+	
+	public Integer getCweId() {
+		return cweId;
 	}
 
 	public int getCallStackStep() {

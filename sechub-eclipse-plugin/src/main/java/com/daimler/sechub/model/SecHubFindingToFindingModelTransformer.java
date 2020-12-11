@@ -35,12 +35,14 @@ public class SecHubFindingToFindingModelTransformer {
 		int id = finding.getId();
 		int callStackStep = 1;
 		String description = finding.getName();
+		Integer cweId = finding.getCweId();
 
 		SecHubCodeCallStack code = finding.getCode();
 
 		/* @formatter:off */
 		FindingNodeBuilder builder = FindingNode.builder().
 				setId(id).
+				setCweId(cweId).
 				setCallStackStep(callStackStep++).
 				setColumn(code.getColumn()).
 				setLine(code.getLine()).

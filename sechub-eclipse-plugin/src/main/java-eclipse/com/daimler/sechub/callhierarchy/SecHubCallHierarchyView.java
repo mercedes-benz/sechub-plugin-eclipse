@@ -3,6 +3,8 @@ package com.daimler.sechub.callhierarchy;
 
 import static com.daimler.sechub.EclipseUtil.getSharedImageDescriptor;
 
+import java.net.URL;
+
 import javax.inject.Inject;
 
 import org.eclipse.jface.action.Action;
@@ -17,21 +19,26 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
+import com.daimler.sechub.Logging;
 import com.daimler.sechub.model.FindingModel;
 import com.daimler.sechub.model.FindingNode;
 import com.daimler.sechub.model.WorkspaceFindingNodeLocator;
@@ -63,7 +70,7 @@ public class SecHubCallHierarchyView extends ViewPart {
 
 	private TreeViewer treeViewerLeft;
 
-	private Label labelDescription;
+	private Link linkDescriptionWithLinks;
 
 	private MoveToStepBeforeAction stepBeforeAction;
 	private MoveToNextStepAction stepNextAction;
@@ -117,8 +124,24 @@ public class SecHubCallHierarchyView extends ViewPart {
 		headlineComposite.setLayout(headlineCompositeLayout);
 		headlineComposite.setLayoutData(headlineCompositeLayoutData);
 
-		labelDescription = new Label(headlineComposite, SWT.NONE);
-		labelDescription.setText("");
+		linkDescriptionWithLinks = new Link(headlineComposite, SWT.NONE);
+		linkDescriptionWithLinks.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String selectedText = e.text;
+				if (selectedText==null) {
+					return;
+				}
+				try {
+					URL url = new URL(selectedText);
+					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(url);
+				}catch(Exception ex) {
+					Logging.logError("Was not able to open url in external browser:"+selectedText,ex);
+				}
+
+			}
+		});
+		linkDescriptionWithLinks.setText("");
 
 		/* trees */
 		GridData treeDividerSashFormLayoutData = GridDataFactory.fillDefaults().grab(true, true).create();
@@ -136,26 +159,26 @@ public class SecHubCallHierarchyView extends ViewPart {
 		SashForm treeDivider2SashForm = new SashForm(treeDividerSashForm, SWT.VERTICAL);
 		treeViewerRight = new TreeViewer(treeDivider2SashForm);
 		treeViewerRight.setContentProvider(new OnlyInputElementItselfTreeContentProvider());
-		
-		Composite descriptionComposite = new Composite(treeDivider2SashForm,SWT.NONE);
+
+		Composite descriptionComposite = new Composite(treeDivider2SashForm, SWT.NONE);
 		GridData descriptionCompositeLayoutData = GridDataFactory.fillDefaults().grab(true, true).create();
-		descriptionComposite.setLayout(new GridLayout(1,false));
-		descriptionComposite.setLayoutData(descriptionCompositeLayoutData);		
-		
+		descriptionComposite.setLayout(new GridLayout(1, false));
+		descriptionComposite.setLayoutData(descriptionCompositeLayoutData);
+
 		Label label = new Label(descriptionComposite, SWT.NONE);
 		label.setText("Report source code:");
 		GridData labelSourceLayoutData = GridDataFactory.fillDefaults().grab(true, false).create();
 		label.setLayoutData(labelSourceLayoutData);
-		
+
 		GridData textSourceLayoutData = GridDataFactory.fillDefaults().grab(true, true).create();
-		rightTreeDescriptionText = new Text(descriptionComposite,SWT.NONE);
+		rightTreeDescriptionText = new Text(descriptionComposite, SWT.NONE);
 		rightTreeDescriptionText.setEditable(false);
 		rightTreeDescriptionText.setLayoutData(textSourceLayoutData);
-		
+
 		Tree treeRight = treeViewerRight.getTree();
 		treeRight.setHeaderVisible(true);
 		treeRight.setLinesVisible(true);
-		
+
 	}
 
 	@Override
@@ -207,7 +230,7 @@ public class SecHubCallHierarchyView extends ViewPart {
 
 		TreeViewerColumn location = createTreeViewerColumn(treeViewerRight, "Location", 200);
 		location.setLabelProvider(columnProviders.locationLabelProvider);
-		
+
 	}
 
 	private TreeViewerColumn createTreeViewerColumn(TreeViewer viewer, String title, int width) {
@@ -245,10 +268,10 @@ public class SecHubCallHierarchyView extends ViewPart {
 	private void selectNodeOnRightTree(FindingNode node) {
 		treeViewerRight.setInput(node);
 		String text = null;
-		if (node!=null) {
+		if (node != null) {
 			text = node.getSource();
-		}else {
-			text= "";
+		} else {
+			text = "";
 		}
 		rightTreeDescriptionText.setText(text);
 	}
@@ -260,11 +283,14 @@ public class SecHubCallHierarchyView extends ViewPart {
 		FindingNode finding = model.getFirstFinding();
 		if (finding != null) {
 			String description = "Finding " + finding.getId() + " - " + finding.getDescription();
-			labelDescription.setText(description);
+			if (finding.getCweId() != null) {
+				description+=" - <a href=\"https://cwe.mitre.org/data/definitions/"+finding.getCweId()+".html\">CWE-"+finding.getCweId()+"</a>";
+			}
+			linkDescriptionWithLinks.setText(description);
 
 			treeViewerLeft.setSelection(new StructuredSelection(finding));
 		} else {
-			labelDescription.setText("");
+			linkDescriptionWithLinks.setText("");
 			treeViewerRight.setInput(null);
 		}
 	}
@@ -283,12 +309,12 @@ public class SecHubCallHierarchyView extends ViewPart {
 			}
 			FindingNode node = (FindingNode) element;
 			FindingNode nodeToSelect = calculateNextNodeToSelect(node);
-			if (node==nodeToSelect) {
+			if (node == nodeToSelect) {
 				/* same as before, so just ignore */
 				return;
 			}
-			
-			treeViewerLeft.setSelection(new StructuredSelection(nodeToSelect),true);
+
+			treeViewerLeft.setSelection(new StructuredSelection(nodeToSelect), true);
 		}
 
 		protected abstract FindingNode calculateNextNodeToSelect(FindingNode node);
@@ -357,7 +383,7 @@ public class SecHubCallHierarchyView extends ViewPart {
 			}
 			FindingNode child = node.getChildren().get(0);
 			return child;
-			
+
 		}
 
 	}
