@@ -92,7 +92,7 @@ public class SecHubReportView extends ViewPart {
 		numberOfFindings = new Label(parent, SWT.NONE);
 		numberOfFindings.setText(NUMBER_OF_FINDINGS_TEXT);
 
-		treeViewer = new TreeViewer(parent);
+		treeViewer = new TreeViewer(parent, SWT.FULL_SELECTION); // we need FULL_SELECTION for windows SWT, otherwise only first column selectable...
 		treeViewer.setContentProvider(new FirstFindingNodesOnlyFindingModelTreeContentProvider());
 
 		Tree tree = treeViewer.getTree();
