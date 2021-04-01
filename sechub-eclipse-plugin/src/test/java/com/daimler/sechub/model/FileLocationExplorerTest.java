@@ -19,7 +19,32 @@ public class FileLocationExplorerTest {
 	@Before
 	public void before() {
 		explorerToTest = new FileLocationExplorer();
+	}
+	
+	@Test
+	public void location_converted_from_unix_to_windows_style_when_separator_is_backslash() throws Exception{
 		
+		/* prepare */
+		String location = "src/main/java/com/example/Test1.java";
+		
+		/* execute */
+		String osSpecificLocation = explorerToTest.convertLocationOSSpecificRegExp(location, "\\");
+		
+		/* test */
+		assertEquals("src\\\\main\\\\java\\\\com\\\\example\\\\Test1.java",osSpecificLocation);
+	}
+	
+	@Test
+	public void location_unconverted_from_unix_when_separator_is_slash() throws Exception{
+		
+		/* prepare */
+		String location = "src/main/java/com/example/Test1.java";
+		
+		/* execute */
+		String osSpecificLocation = explorerToTest.convertLocationOSSpecificRegExp(location, "/");
+		
+		/* test */
+		assertEquals("src/main/java/com/example/Test1.java",osSpecificLocation);
 	}
 	
 	@Test
