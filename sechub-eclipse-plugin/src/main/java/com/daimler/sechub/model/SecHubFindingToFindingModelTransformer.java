@@ -30,7 +30,8 @@ public class SecHubFindingToFindingModelTransformer {
 	private void addNodesToMapForFinding(Map<Severity, List<FindingNode>> map, SecHubFinding finding) {
 		Severity severity = finding.getSeverity();
 
-		List<FindingNode> list = map.computeIfAbsent(severity, SecHubFindingToFindingModelTransformer::createFindingNodeList);
+		List<FindingNode> list = map.computeIfAbsent(severity,
+				SecHubFindingToFindingModelTransformer::createFindingNodeList);
 
 		int id = finding.getId();
 		int callStackStep = 1;
@@ -38,6 +39,13 @@ public class SecHubFindingToFindingModelTransformer {
 		Integer cweId = finding.getCweId();
 
 		SecHubCodeCallStack code = finding.getCode();
+		if (code == null) {
+			
+			code = new SecHubCodeCallStack(); // fallback when no code call stack available
+			
+			code.setColumn(0); // must do this, otherwise NPE by auto boxing null values
+			code.setLine(0);
+		}
 
 		/* @formatter:off */
 		FindingNodeBuilder builder = FindingNode.builder().
@@ -78,7 +86,7 @@ public class SecHubFindingToFindingModelTransformer {
 
 	private FindingModel createRootNodeWithChildren(Map<Severity, List<FindingNode>> map) {
 		FindingModel model = new FindingModel();
-		
+
 		/* Add first level nodes, to model - sorted by severity */
 		List<Severity> severitySortedCriticalFirst = Arrays.asList(Severity.values());
 		Collections.reverse(severitySortedCriticalFirst);
