@@ -4,7 +4,7 @@ Bundle-Name: SecHub
 Bundle-SymbolicName: com.daimler.sechub.plugin;singleton:=true
 Bundle-Version: 0.2.1
 Bundle-Activator: com.daimler.sechub.SecHubActivator
-Bundle-Vendor: Daimler TSS GmbH
+Bundle-Vendor: Mercedes-Benz Tech Innovation GmbH
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
