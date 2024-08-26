@@ -222,4 +222,12 @@
           type="org.eclipse.core.resources.IResource">
       </propertyTester>
    </extension>
+      <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.daimler.sechub.settings.SechubPreferencesPage"
+            id="sechubplugin.settings.page"
+            name="SecHub">
+      </page>
+   </extension>
 </plugin>
