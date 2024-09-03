@@ -6,8 +6,8 @@
          point="org.eclipse.ui.decorators">
       <decorator
             adaptable="true"
-            class="com.daimler.sechub.decorators.SecHubReportJSONFileDecorator"
-            id="com.daimler.sechub.decorators.SecHubDecorator"
+            class="com.mercedesbenz.sechub.decorators.SecHubReportJSONFileDecorator"
+            id="com.mercedesbenz.sechub.decorators.SecHubDecorator"
             label="SecHub Report File Decorator"
             lightweight="true"
             state="true">
@@ -21,35 +21,35 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            id="com.daimler.sechub.plugin.commands.category"
+            id="com.mercedesbenz.sechub.plugin.commands.category"
             name="SechHub Import">
       </category>
       <command
-            categoryId="com.daimler.sechub.plugin.commands.category"
+            categoryId="com.mercedesbenz.sechub.plugin.commands.category"
             name="SecHub Import"
-            id="com.daimler.sechub.plugin.commands.importCommand">
+            id="com.mercedesbenz.sechub.plugin.commands.importCommand">
       </command>
       <command
-            categoryId="com.daimler.sechub.plugin.commands.category"
+            categoryId="com.mercedesbenz.sechub.plugin.commands.category"
             name="SecHub Import By current selected resource"
-            id="com.daimler.sechub.plugin.commands.importCommandByCurrentSelectedResource">
+            id="com.mercedesbenz.sechub.plugin.commands.importCommandByCurrentSelectedResource">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="com.daimler.sechub.handlers.SecHubJobImportHandler"
-            commandId="com.daimler.sechub.plugin.commands.importCommand">
+            class="com.mercedesbenz.sechub.handlers.SecHubJobImportHandler"
+            commandId="com.mercedesbenz.sechub.plugin.commands.importCommand">
       </handler>
       <handler
-            class="com.daimler.sechub.handlers.SecHubJobImportByContextMenuHandler"
-            commandId="com.daimler.sechub.plugin.commands.importCommandByCurrentSelectedResource">
+            class="com.mercedesbenz.sechub.handlers.SecHubJobImportByContextMenuHandler"
+            commandId="com.mercedesbenz.sechub.plugin.commands.importCommandByCurrentSelectedResource">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="com.daimler.sechub.plugin.commands.importCommand"
+            commandId="com.mercedesbenz.sechub.plugin.commands.importCommand"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             contextId="org.eclipse.ui.contexts.window"
             sequence="M1+6">
@@ -61,12 +61,12 @@
       <menuContribution
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
-               id="com.daimler.sechub.plugin.menus.sechubMenu"
+               id="com.mercedesbenz.sechub.plugin.menus.sechubMenu"
                label="SecHub"
                mnemonic="M">
             <command
-                  commandId="com.daimler.sechub.plugin.commands.importCommand"
-                  id="com.daimler.sechub.plugin.menus.importCommand"
+                  commandId="com.mercedesbenz.sechub.plugin.commands.importCommand"
+                  id="com.mercedesbenz.sechub.plugin.menus.importCommand"
                   mnemonic="S">
             </command>
          </menu>
@@ -74,10 +74,10 @@
       <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="com.daimler.sechub.plugin.toolbars.sampleToolbar">
+               id="com.mercedesbenz.sechub.plugin.toolbars.sampleToolbar">
             <command
-                  id="com.daimler.sechub.plugin.toolbars.importCommand"
-                  commandId="com.daimler.sechub.plugin.commands.importCommand"
+                  id="com.mercedesbenz.sechub.plugin.toolbars.importCommand"
+                  commandId="com.mercedesbenz.sechub.plugin.commands.importCommand"
                   icon="icons/sechub-logo.png"
                   tooltip="Import SecHub Report">
             </command>
@@ -98,14 +98,14 @@
    <extension
          point="org.eclipse.ui.importWizards">
       <category
-            id="com.daimler.sechub.category.import"
+            id="com.mercedesbenz.sechub.category.import"
             name="SecHub">
       </category>
       <wizard
-            id="com.daimler.sechub.importWizards.ImportWizard"
+            id="com.mercedesbenz.sechub.importWizards.ImportWizard"
             name="Import SecHub job report"
-            class="com.daimler.sechub.report.SecHubReportImportWizard"
-            category="com.daimler.sechub.category.import"
+            class="com.mercedesbenz.sechub.report.SecHubReportImportWizard"
+            category="com.mercedesbenz.sechub.category.import"
             icon="icons/sechub-logo.png">
          <description>
             Import a sechub report file from the local file system into the workspace.
@@ -117,15 +117,15 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            id="com.daimler.sechub.preferences.SecHubPreferencePage"
+            id="com.mercedesbenz.sechub.preferences.SecHubPreferencePage"
             name="SecHub Preferences"
-            class="com.daimler.sechub.preferences.SecHubPreferencePage">
+            class="com.mercedesbenz.sechub.preferences.SecHubPreferencePage">
       </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.daimler.sechub.preferences.PreferenceInitializer">
+            class="com.mercedesbenz.sechub.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    -->
@@ -133,30 +133,30 @@
          point="org.eclipse.ui.views">
       <category
             name="SecHub"
-            id="com.daimler.sechub.viewcategory">
+            id="com.mercedesbenz.sechub.viewcategory">
       </category>
       <view
-            id="com.daimler.sechub.views.SecHubReportView"
+            id="com.mercedesbenz.sechub.views.SecHubReportView"
             name="SecHub Report"
             icon="icons/sechub-logo.png"
-            class="com.daimler.sechub.report.SecHubReportView"
-            category="com.daimler.sechub.viewcategory"
+            class="com.mercedesbenz.sechub.report.SecHubReportView"
+            category="com.mercedesbenz.sechub.viewcategory"
             inject="true">
       </view>
        <view
-            id="com.daimler.sechub.views.SecHubCallHierarchyView"
+            id="com.mercedesbenz.sechub.views.SecHubCallHierarchyView"
             name="SecHub Call Hierarchy"
             icon="icons/sechub-logo.png"
-            class="com.daimler.sechub.callhierarchy.SecHubCallHierarchyView"
-            category="com.daimler.sechub.viewcategory"
+            class="com.mercedesbenz.sechub.callhierarchy.SecHubCallHierarchyView"
+            category="com.mercedesbenz.sechub.viewcategory"
             inject="true">
       </view>
             <view
-            id="com.daimler.sechub.views.SecHubServerView"
+            id="com.mercedesbenz.sechub.views.SecHubServerView"
             name="SecHub Server"
             icon="icons/sechub-logo.png"
-            class="com.daimler.sechub.server.SecHubServerView"
-            category="com.daimler.sechub.viewcategory"
+            class="com.mercedesbenz.sechub.server.SecHubServerView"
+            category="com.mercedesbenz.sechub.viewcategory"
             inject="true">
       </view>
    </extension>
@@ -165,8 +165,14 @@
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
          <view
-               id="com.daimler.sechub.views.SecHubReportView"
+               id="com.mercedesbenz.sechub.views.SecHubReportView"
                relative="org.eclipse.ui.views.ProblemView"
+               relationship="right"
+               ratio="0.5">
+         </view>
+         <view
+               id="com.mercedesbenz.sechub.views.SecHubServerView"
+               relative="com.mercedesbenz.sechub.views.SecHubReportView"
                relationship="right"
                ratio="0.5">
          </view>
@@ -180,7 +186,7 @@
    </extension>
    <extension 
    		point="org.eclipse.core.resources.markers" 
-   		id="com.daimler.sechhub.markers.finding" 
+   		id="com.mercedesbenz.sechhub.markers.finding" 
    		name="SecHub Finding">
 	    <super type="org.eclipse.core.resources.problemmarker"/>
 	    <persistent value="false"/>
@@ -194,9 +200,9 @@
         <!-- http://help.eclipse.org/neon/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Fguide%2Fworkbench_cmd_menus.htm -->
         <menuContribution locationURI="popup:org.eclipse.ui.popup.any?before=additions">
                 <command
-            	  commandId="com.daimler.sechub.plugin.commands.importCommandByCurrentSelectedResource"
+            	  commandId="com.mercedesbenz.sechub.plugin.commands.importCommandByCurrentSelectedResource"
                   icon="icons/sechub-logo.png"
-                  id="com.daimler.sechub.plugin.popup.importCommandByCurrentSelectedResource"
+                  id="com.mercedesbenz.sechub.plugin.popup.importCommandByCurrentSelectedResource"
                   label="Open as SecHub Report"
                   tooltip="Opens as SecHub Report"
                   style="push">
@@ -207,7 +213,7 @@
 				         				<count value="1"/>
 	                                    <iterate ifEmpty="false">
 	                                    	 <adapt type="org.eclipse.core.resources.IResource">
-	                                    	 <test property="com.daimler.sechub.isSecHubReportFile" value="true"/>
+	                                    	 <test property="com.mercedesbenz.sechub.isSecHubReportFile" value="true"/>
 	                                    	 </adapt>
 				         				</iterate>
                               </with>
@@ -223,9 +229,9 @@
   	  <!-- see https://wiki.eclipse.org/Platform_Expression_Framework -->
   	  <!-- see http://help.eclipse.org/neon/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/workbench_cmd_expressions.htm -->
       <propertyTester
-          class="com.daimler.sechub.report.SecHubStandardReportNamePatternPropertyTester"
-          id="com.daimler.sechub.report.SecHubStandardReportNamePatternPropertyTester"
-          namespace="com.daimler.sechub"
+          class="com.mercedesbenz.sechub.report.SecHubStandardReportNamePatternPropertyTester"
+          id="com.mercedesbenz.sechub.report.SecHubStandardReportNamePatternPropertyTester"
+          namespace="com.mercedesbenz.sechub"
           properties="isSecHubReportFile"
           type="org.eclipse.core.resources.IResource">
       </propertyTester>
@@ -233,7 +239,7 @@
       <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="com.daimler.sechub.settings.SechubPreferencesPage"
+            class="com.mercedesbenz.sechub.settings.SechubPreferencesPage"
             id="sechubplugin.settings.page"
             name="SecHub">
       </page>

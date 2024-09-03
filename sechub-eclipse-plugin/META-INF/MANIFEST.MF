@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SecHub
-Bundle-SymbolicName: com.daimler.sechub.plugin;singleton:=true
-Bundle-Version: 0.2.1
-Bundle-Activator: com.daimler.sechub.SecHubActivator
+Bundle-SymbolicName: com.mercedesbenz.sechub.plugin;singleton:=true
+Bundle-Version: 0.3.0
+Bundle-Activator: com.mercedesbenz.sechub.SecHubActivator
 Bundle-Vendor: Mercedes-Benz Tech Innovation GmbH
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.security;bundle-version="1.4.300",
  org.eclipse.core.runtime;bundle-version="3.31.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Automatic-Module-Name: com.daimler.sechub.plugin
+Automatic-Module-Name: com.mercedesbenz.sechub.plugin
 Import-Package: javax.inject,
  org.eclipse.e4.core.services.log
 Bundle-ActivationPolicy: lazy
