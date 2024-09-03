@@ -151,6 +151,14 @@
             category="com.daimler.sechub.viewcategory"
             inject="true">
       </view>
+            <view
+            id="com.daimler.sechub.views.SecHubServerView"
+            name="SecHub Server"
+            icon="icons/sechub-logo.png"
+            class="com.daimler.sechub.server.SecHubServerView"
+            category="com.daimler.sechub.viewcategory"
+            inject="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">

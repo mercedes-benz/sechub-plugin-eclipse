@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.daimler.sechub.model.SecHubFindingToSecHubNodeTransformerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-28T10:07:15" hostname="devtux" time="0.006">
-  <properties/>
-  <testcase name="adding_one_finding_with_two_stacktraces_results_in_node_containing_one_child_having_another_one_with_expected_data" classname="com.daimler.sechub.model.SecHubFindingToSecHubNodeTransformerTest" time="0.006"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

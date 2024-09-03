@@ -6,7 +6,6 @@ Bundle-Version: 0.2.1
 Bundle-Activator: com.daimler.sechub.SecHubActivator
 Bundle-Vendor: Mercedes-Benz Tech Innovation GmbH
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.ui.ide,
  org.eclipse.ui.editors,
@@ -14,7 +13,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.core.filesystem,
  org.eclipse.jface,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.eclipse.equinox.security;bundle-version="1.4.300",
+ org.eclipse.core.runtime;bundle-version="3.31.100"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: com.daimler.sechub.plugin
 Import-Package: javax.inject,
