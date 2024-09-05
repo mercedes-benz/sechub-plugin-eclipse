@@ -7,9 +7,9 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 
-import com.daimler.sechub.commons.model.TrafficLight;
 import com.mercedesbenz.sechub.EclipseUtil;
 import com.mercedesbenz.sechub.Logging;
+import com.mercedesbenz.sechub.commons.model.TrafficLight;
 import com.mercedesbenz.sechub.model.FindingModel;
 
 public class SecHubReportViewUpdater {

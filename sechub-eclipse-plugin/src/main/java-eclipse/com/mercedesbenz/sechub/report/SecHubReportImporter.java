@@ -11,10 +11,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.daimler.sechub.client.java.SecHubClient;
-import com.daimler.sechub.client.java.SecHubReport;
-import com.daimler.sechub.client.java.SecHubReportException;
-import com.daimler.sechub.commons.model.SecHubFinding;
+import com.mercedesbenz.sechub.api.SecHubReport;
+import com.mercedesbenz.sechub.api.SecHubReportException;
+import com.mercedesbenz.sechub.commons.model.SecHubFinding;
 import com.mercedesbenz.sechub.model.FindingModel;
 import com.mercedesbenz.sechub.model.SecHubFindingToFindingModelTransformer;
 
@@ -43,7 +42,7 @@ public class SecHubReportImporter {
 		monitor.beginTask("Import SecHub report from " + absolutePath, 3);
 
 		try {
-			SecHubReport report = SecHubClient.importSecHubJsonReport(reportFile);
+			SecHubReport report = SecHubReport.fromFile(reportFile);
 			if (report == null) {
 				return createErrorStatus("Reportfile importer returned null");
 			}

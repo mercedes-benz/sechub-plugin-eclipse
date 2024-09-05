@@ -10,9 +10,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.daimler.sechub.commons.model.SecHubCodeCallStack;
-import com.daimler.sechub.commons.model.SecHubFinding;
-import com.daimler.sechub.commons.model.Severity;
+import com.mercedesbenz.sechub.commons.model.SecHubCodeCallStack;
+import com.mercedesbenz.sechub.commons.model.SecHubFinding;
+import com.mercedesbenz.sechub.commons.model.Severity;
 
 public class SecHubFindingToSecHubNodeTransformerTest {
 	

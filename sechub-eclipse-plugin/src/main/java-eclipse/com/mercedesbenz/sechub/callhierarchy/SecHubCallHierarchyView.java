@@ -3,6 +3,7 @@ package com.mercedesbenz.sechub.callhierarchy;
 
 import static com.mercedesbenz.sechub.EclipseUtil.getSharedImageDescriptor;
 
+import java.net.URI;
 import java.net.URL;
 
 import javax.inject.Inject;
@@ -133,7 +134,7 @@ public class SecHubCallHierarchyView extends ViewPart {
 					return;
 				}
 				try {
-					URL url = new URL(selectedText);
+					URL url = new URI(selectedText).toURL();
 					PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(url);
 				}catch(Exception ex) {
 					Logging.logError("Was not able to open url in external browser:"+selectedText,ex);

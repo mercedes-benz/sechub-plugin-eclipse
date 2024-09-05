@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.daimler.sechub.commons.model.TrafficLight;
+import com.mercedesbenz.sechub.commons.model.TrafficLight;
 
 public class FindingModel {
 
