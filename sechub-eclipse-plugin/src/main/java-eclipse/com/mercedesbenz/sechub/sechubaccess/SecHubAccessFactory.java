@@ -15,7 +15,7 @@ public class SecHubAccessFactory {
     	String apiToken;
     	
 		try {
-			username = secureStorageAccess.readSecureStorageApitoken();
+			username = secureStorageAccess.readSecureStorageUsername();
 			apiToken = secureStorageAccess.readSecureStorageApitoken();
 		} catch (StorageException e) {
 			username = "";

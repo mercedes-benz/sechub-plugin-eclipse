@@ -11,9 +11,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-import com.mercedesbenz.sechub.sechubaccess.SecHubAccess;
-import com.mercedesbenz.sechub.sechubaccess.SecHubAccessFactory;
-
 public class SechubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage  {
 	
 	private StringFieldEditor serverUrlField;
