@@ -26,6 +26,7 @@ public class SecHubServerView extends ViewPart {
     private static final String SERVER_URL_NOT_CONFIGURED = "Server URL not configured";
     private static final String SERVER_CONNECTION_ALIVE = "Connection alive";
     private static final String SERVER_CONNECTION_NOT_ALIVE  = "Connection not alive";
+    private static final String SERVER_CONNECTION_NOT_CHECKED = "Connection not checked";
     private static final String BUTTON_TEXT = "check connection";
 
 	@Override
@@ -61,7 +62,7 @@ public class SecHubServerView extends ViewPart {
         serverConnectionLabel = WidgetFactory
         		.label(SWT.NONE)
         		.layoutData(new GridData(SWT.LEFT, SWT.TOP, true, true))
-        		.text(SERVER_CONNECTION_TEXT + "not checked")
+        		.text(SERVER_CONNECTION_TEXT + SERVER_CONNECTION_NOT_CHECKED)
         		.create(parent);
         
         serverActiveButton = new Button(parent, SWT.PUSH);

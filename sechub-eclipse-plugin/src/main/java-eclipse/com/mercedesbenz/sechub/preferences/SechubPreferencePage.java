@@ -69,6 +69,7 @@ public class SechubPreferencePage extends FieldEditorPreferencePage implements I
 			 serverUrlField.showErrorMessage();
 			 return false;
 		 }
+		 addHttpsProtocol();
 		 
 		 serverUrlField.store();
 		 
@@ -84,6 +85,15 @@ public class SechubPreferencePage extends FieldEditorPreferencePage implements I
 	 
 	 private void validateServerURL() throws URISyntaxException {
 		new URI(serverUrlField.getStringValue());
+	 }
+	 
+	 private void addHttpsProtocol() {
+		String url = serverUrlField.getStringValue();
+		if (url.startsWith("http://") || url.startsWith("https://") || url.isBlank()) {
+			return;
+		}
+		url = "https://" + url;
+		serverUrlField.setStringValue(url);
 	 }
 }
 	
