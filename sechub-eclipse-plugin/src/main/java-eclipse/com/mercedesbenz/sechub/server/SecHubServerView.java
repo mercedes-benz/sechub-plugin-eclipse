@@ -45,8 +45,8 @@ public class SecHubServerView extends ViewPart {
 		treeViewer.setLabelProvider(labelProviderDelegate);
 		
 		Tree tree = treeViewer.getTree();
-		tree.setHeaderVisible(true);
-		tree.setLinesVisible(true);
+		tree.setHeaderVisible(false);
+		tree.setLinesVisible(false);
 
 		
 		createActions();
