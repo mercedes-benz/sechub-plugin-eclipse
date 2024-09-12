@@ -24,21 +24,93 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.Bundle;
 
 public class EclipseUtil {
 
 	private static final IProgressMonitor NULL_MONITOR = new NullProgressMonitor();
 
 	public static IFile toIFileOrNull(java.nio.file.Path path) {
-		if (path==null) {
+		if (path == null) {
 			return null;
 		}
 		return toIFileOrNull(path.toFile());
+	}
+
+	/**
+	 * Get image by path from image registry. If not already registered a new image
+	 * will be created and registered. If not createable a fallback image is used
+	 * instead
+	 * 
+	 * @param path
+	 * @param pluginId - plugin id to identify which plugin image should be loaded
+	 * @return image
+	 */
+	public static Image getImage(String path, String pluginId) {
+		ImageRegistry imageRegistry = getImageRegistry();
+		if (imageRegistry == null) {
+			return null;
+		}
+		Image image = imageRegistry.get(path);
+		if (image == null) {
+			ImageDescriptor imageDesc = createImageDescriptor(path, pluginId);
+			image = imageDesc.createImage();
+			if (image == null) {
+				image = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK);
+			}
+			imageRegistry.put(path, image);
+		}
+		return image;
+	}
+	
+	public static ImageDescriptor createImageDescriptor(String path) {
+		return createImageDescriptor(path, SecHubActivator.PLUGIN_ID);
+	}
+
+	public static ImageDescriptor createImageDescriptor(String path, String pluginId) {
+		if (path == null) {
+			/* fall back if path null , so avoid NPE in eclipse framework */
+			return ImageDescriptor.getMissingImageDescriptor();
+		}
+		if (pluginId == null) {
+			/* fall back if pluginId null , so avoid NPE in eclipse framework */
+			return ImageDescriptor.getMissingImageDescriptor();
+		}
+		Bundle bundle = Platform.getBundle(pluginId);
+		if (bundle == null) {
+			/*
+			 * fall back if bundle not available, so avoid NPE in eclipse framework
+			 */
+			return ImageDescriptor.getMissingImageDescriptor();
+		}
+		URL url = FileLocator.find(bundle, new Path(path), null);
+
+		ImageDescriptor imageDesc = ImageDescriptor.createFromURL(url);
+		return imageDesc;
+	}
+
+	/**
+	 * Returns active workbench shell - or <code>null</code>
+	 * 
+	 * @return active workbench shell - or <code>null</code>
+	 */
+	public static Shell getActiveWorkbenchShell() {
+		IWorkbench workbench = getWorkbench();
+		if (workbench == null) {
+			return null;
+		}
+		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+		if (window == null) {
+			return null;
+		}
+		Shell shell = window.getShell();
+		return shell;
 	}
 
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
@@ -83,7 +155,7 @@ public class EclipseUtil {
 		}
 
 	}
-	
+
 	public static File toFileOrNull(IPath path) throws CoreException {
 		if (path == null) {
 			return null;
@@ -139,16 +211,16 @@ public class EclipseUtil {
 			return window.getActivePage();
 		}
 		final EclipseSubContext subContext = new EclipseSubContext();
-		getSafeDisplay().syncExec(()-> {
-			subContext.window =PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-			if (subContext.window!=null) {
+		getSafeDisplay().syncExec(() -> {
+			subContext.window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+			if (subContext.window != null) {
 				subContext.activePage = subContext.window.getActivePage();
 			}
 		});
 		return subContext.activePage;
 	}
-	
-	private static class EclipseSubContext{
+
+	private static class EclipseSubContext {
 		IWorkbenchWindow window;
 		IWorkbenchPage activePage;
 	}
@@ -183,6 +255,7 @@ public class EclipseUtil {
 	public static Image getSharedImage(String symbolicName) {
 		return PlatformUI.getWorkbench().getSharedImages().getImage(symbolicName);
 	}
+
 	public static ImageDescriptor getSharedImageDescriptor(String symbolicName) {
 		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(symbolicName);
 	}
@@ -194,7 +267,8 @@ public class EclipseUtil {
 	public static IStatus createErrorStatus(String message) {
 		return createErrorStatus(message, null);
 	}
+
 	public static IStatus createErrorStatus(String message, Throwable throwable) {
-		return new Status(IStatus.ERROR,SecHubActivator.PLUGIN_ID,message,throwable);
+		return new Status(IStatus.ERROR, SecHubActivator.PLUGIN_ID, message, throwable);
 	}
 }

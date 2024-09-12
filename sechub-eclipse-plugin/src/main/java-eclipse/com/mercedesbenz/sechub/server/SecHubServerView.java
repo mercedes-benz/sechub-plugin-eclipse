@@ -1,94 +1,120 @@
 package com.mercedesbenz.sechub.server;
 
-import org.eclipse.jface.widgets.WidgetFactory;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mercedesbenz.sechub.preferences.PreferenceStorageAcccess;
-import com.mercedesbenz.sechub.preferences.PreferenceConstants;
-import com.mercedesbenz.sechub.sechubaccess.SecHubAccess;
-import com.mercedesbenz.sechub.sechubaccess.SecHubAccessFactory;
+import com.mercedesbenz.sechub.access.SecHubAccess;
+import com.mercedesbenz.sechub.access.SecHubAccess.ServerAccessData;
+import com.mercedesbenz.sechub.access.SecHubAccessFactory;
+import com.mercedesbenz.sechub.preferences.PreferenceIdConstants;
+import com.mercedesbenz.sechub.preferences.SecHubPreferences;
+import com.mercedesbenz.sechub.server.data.SecHubServerDataModel;
+import com.mercedesbenz.sechub.server.data.SecHubServerDataModel.ServerElement;
 
 public class SecHubServerView extends ViewPart {
-	
-    private Label serverUrlLabel;
-    private Label serverConnectionLabel;
-    private Button serverActiveButton;
-    private PreferenceStorageAcccess preferenceAccess;
-    
-    private static final String SERVER_URL_TEXT = "Server URL: ";
-	private static final String SERVER_CONNECTION_TEXT = "Server Connection: ";
-    private static final String SERVER_URL_NOT_CONFIGURED = "Server URL not configured";
-    private static final String SERVER_CONNECTION_ALIVE = "Connection alive";
-    private static final String SERVER_CONNECTION_NOT_ALIVE  = "Connection not alive";
-    private static final String SERVER_CONNECTION_NOT_CHECKED = "Connection not checked";
-    private static final String BUTTON_TEXT = "check connection";
+
+	private TreeViewer treeViewer;
+	private SecHubServerTreeViewContentProvider serverTreeContentProvider;
+	private RefreshSecHubServerViewAction refreshServerViewAction;
+	private OpenSecHubServerPreferencesAction openServerPreferencesAction;
 
 	@Override
 	public void createPartControl(Composite parent) {
-		preferenceAccess = new PreferenceStorageAcccess(); 
-		String serverURL = preferenceAccess.readServerURLFromPreferenceStorage();
+
+		treeViewer = new TreeViewer(parent, SWT.FULL_SELECTION); // we need FULL_SELECTION for windows SWT, otherwise
+																	// only first column selectable...
+
+		serverTreeContentProvider = new SecHubServerTreeViewContentProvider();
+		treeViewer.setContentProvider(serverTreeContentProvider);
 		
-		if (serverURL.isEmpty()) {
-			serverURL = SERVER_URL_NOT_CONFIGURED;
-		}
- 		
-        setUpLablesAndButton(parent, serverURL);
-                
-        /* whenever the serverURL changes the check will be executed */
-        preferenceAccess.getScopedPreferenceStore().addPropertyChangeListener(event -> {
-            if (event.getProperty().equals(PreferenceConstants.SERVER_PREFERENCES_TEXT_FIELD)) {
-                serverUrlLabel.setText(SERVER_URL_TEXT + event.getNewValue().toString());
-                checkServerAlive();
-            }
-        });
+		SechubServerTreeLabelProvider labelProvider = new SechubServerTreeLabelProvider();
+		
+		ILabelDecorator labelDecorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+		
+		DecoratingStyledCellLabelProvider labelProviderDelegate = new DecoratingStyledCellLabelProvider(labelProvider, labelDecorator,null);
+		treeViewer.setLabelProvider(labelProviderDelegate);
+		
+		Tree tree = treeViewer.getTree();
+		tree.setHeaderVisible(true);
+		tree.setLinesVisible(true);
+
+		
+		createActions();
+		contributeToActionBars();
+		
+		GridLayoutFactory.fillDefaults().generateLayout(parent);
+		
+		/* whenever the serverURL changes the check will be executed */
+		SecHubPreferences.get().getScopedPreferenceStore().addPropertyChangeListener(event -> {
+			boolean serverSetupChanged = false;
+			serverSetupChanged = serverSetupChanged || event.getProperty().equals(PreferenceIdConstants.SERVER);
+			serverSetupChanged = serverSetupChanged || event.getProperty().equals(PreferenceIdConstants.CREDENTIALS_CHANGED);
+			
+			if (serverSetupChanged) {
+				refreshServerView();
+			}
+		});
+		refreshServerView();
+
+	}
+	
+	private void contributeToActionBars() {
+		IActionBars actionBars = getViewSite().getActionBars();
+
+		IToolBarManager toolBarManager = actionBars.getToolBarManager();
+		toolBarManager.add(refreshServerViewAction);
+		toolBarManager.add(openServerPreferencesAction);
+		
+		IMenuManager menuManager = actionBars.getMenuManager();
+		menuManager.add(refreshServerViewAction);
+		menuManager.add(openServerPreferencesAction);
 	}
 
-	private void setUpLablesAndButton(Composite parent, String serverURL) {
- 		GridLayout gridLayout = new GridLayout(2, false);
- 		parent.setLayout(gridLayout);
- 		
-		serverUrlLabel = WidgetFactory
-        		.label(SWT.NONE)
-        		.layoutData(new GridData(SWT.LEFT, SWT.TOP, true, true))
-        		.text(SERVER_URL_TEXT + serverURL)
-        		.create(parent);
-        
-        serverConnectionLabel = WidgetFactory
-        		.label(SWT.NONE)
-        		.layoutData(new GridData(SWT.LEFT, SWT.TOP, true, true))
-        		.text(SERVER_CONNECTION_TEXT + SERVER_CONNECTION_NOT_CHECKED)
-        		.create(parent);
-        
-        serverActiveButton = new Button(parent, SWT.PUSH);
-        serverActiveButton.setText(BUTTON_TEXT);
-        serverActiveButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true));
-        serverActiveButton.addListener(SWT.Selection, event -> checkServerAlive());
+	private void createActions() {
+		refreshServerViewAction = new RefreshSecHubServerViewAction(this);
+		openServerPreferencesAction = new OpenSecHubServerPreferencesAction();
 	}
 	
 	@Override
 	public void setFocus() {
+		treeViewer.getControl().setFocus();
 	}
-	
-	private void checkServerAlive() {
-		SecHubAccess secHubAccess = SecHubAccessFactory.create();
-		boolean isSecHubAlive = secHubAccess.isSecHubServerAlive();
-		updateServerAliveStatus(isSecHubAlive);
-	}
-	
-	private void updateServerAliveStatus(boolean isALive) {
-		if (isALive) {
-			serverConnectionLabel.setText(SERVER_CONNECTION_TEXT + SERVER_CONNECTION_ALIVE);
-		} else {
-			serverConnectionLabel.setText(SERVER_CONNECTION_TEXT + SERVER_CONNECTION_NOT_ALIVE);
-		}
-	}
-	
 
+	public void refreshServerView() {
+		SecHubServerDataModel model = new SecHubServerDataModel();
+		initModel(model);
+		
+	    treeViewer.setInput(model);
+	}
+
+	private void initModel(SecHubServerDataModel model) {
+		// Currently we provide max of one SecHub server
+		String serverURL = SecHubPreferences.get().getServerURL();
+		
+		if (serverURL==null || serverURL.isBlank()) {
+			return;
+		}
+		
+		ServerElement serverElement = model.new ServerElement();
+		serverElement.setUrl(serverURL);
+		
+		model.getServers().add(serverElement);
+		
+		SecHubAccess secHubAccess = SecHubAccessFactory.create();
+		ServerAccessData status = secHubAccess.fetchServerAccessData();
+		serverElement.setAlive(status.isAlive());
+		serverElement.setLoginSuccessful(! status.isLoginFaiure());
+		
+	}
 
 }

@@ -2,22 +2,33 @@ package com.mercedesbenz.sechub.preferences;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.UUID;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
+import com.mercedesbenz.sechub.EclipseUtil;
+
 public class SechubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage  {
+	
+	public static final String PAGE_ID = "sechub.preference.page";
 	
 	private StringFieldEditor serverUrlField;
 	private StringFieldEditor usernameField;
 	private StringFieldEditor apiTokenField;
 	
+	public static final String PREFERENCE_PAGE_ID = "sechub.preference.page";
+	
 	private SecureStorageAccess secureStorageAccess;
+
 
 	public SechubPreferencePage() {
 		super(GRID);
@@ -25,21 +36,26 @@ public class SechubPreferencePage extends FieldEditorPreferencePage implements I
 	
 	@Override
     public void init(IWorkbench workbench) {
-        setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceConstants.SECHUB_PREFERENCES_PAGE));
+        setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PAGE_ID));
+        
         secureStorageAccess = new SecureStorageAccess();
 	}
     
 	@Override
     public void createFieldEditors() {
-    	serverUrlField = new StringFieldEditor(PreferenceConstants.SERVER_PREFERENCES_TEXT_FIELD, "Server URL:", getFieldEditorParent());
-    	usernameField = new StringFieldEditor(PreferenceConstants.USERNAME_PREFERENCES_TEXT_FIELD, "Username", getFieldEditorParent());
-        
-        apiTokenField = new StringFieldEditor(PreferenceConstants.APITOKEN_PREFERENCES_TEXT_FIELD, "API Token:", getFieldEditorParent());
+    	serverUrlField = new StringFieldEditor(PreferenceIdConstants.SERVER, "Server URL:", getFieldEditorParent());
+    	
+    	
+    	usernameField = new StringFieldEditor(PreferenceIdConstants.USER_ID, "User id:", getFieldEditorParent());
+    	usernameField.getTextControl(getFieldEditorParent()).setEchoChar('*');
+        apiTokenField = new StringFieldEditor(PreferenceIdConstants.APITOKEN, "API Token:", getFieldEditorParent());
         apiTokenField.getTextControl(getFieldEditorParent()).setEchoChar('*');
+        
+        
         addField(serverUrlField);
         addField(usernameField);
         addField(apiTokenField);
-       
+        
      }
 	
 	@Override
@@ -47,8 +63,9 @@ public class SechubPreferencePage extends FieldEditorPreferencePage implements I
 		super.initialize();
 		
 		 try {
-			 String username = secureStorageAccess.readSecureStorageUsername();
-			 String apitoken = secureStorageAccess.readSecureStorageApitoken();
+			 String username = secureStorageAccess.getUserId();
+			 String apitoken = secureStorageAccess.getApiToken();
+			 
 			 usernameField.setStringValue(username);
 			 apiTokenField.setStringValue(apitoken);
 			 
@@ -58,7 +75,6 @@ public class SechubPreferencePage extends FieldEditorPreferencePage implements I
 		 }
 	}
 
-	
 	 @Override
 	 public boolean performOk() {
 		 try {
@@ -71,15 +87,25 @@ public class SechubPreferencePage extends FieldEditorPreferencePage implements I
 		 }
 		 addHttpsProtocol();
 		 
-		 serverUrlField.store();
+		 serverUrlField.store(); // triggers change event when field has changed
 		 
-		 String username = usernameField.getStringValue();
+		 boolean credentialsChanged = false;
+		 String userId = usernameField.getStringValue();
 		 String apitoken = apiTokenField.getStringValue();
+		 
 		 try {
-			 secureStorageAccess.storeSecureStorage(username, apitoken);
+			 credentialsChanged = credentialsChanged ||! Objects.equals(userId, secureStorageAccess.getUserId());
+			 credentialsChanged = credentialsChanged ||! Objects.equals(apitoken, secureStorageAccess.getApiToken());
+				 
+			 secureStorageAccess.storeSecureStorage(userId, apitoken);
 		 }catch (StorageException e) {
 			 return false;
 		 }
+		 if (credentialsChanged) {
+			 // we store here an artificial value in peference store - this is recognized in server view which leads to an update
+			 SecHubPreferences.get().getScopedPreferenceStore().setValue(PreferenceIdConstants.CREDENTIALS_CHANGED, LocalDateTime.now().toString());
+		 }
+		 
 		 return true;
 	 }
 	 

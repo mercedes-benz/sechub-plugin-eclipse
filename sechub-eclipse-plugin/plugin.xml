@@ -145,15 +145,44 @@
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view
-               id="com.mercedesbenz.sechub.views.SecHubReportView"
-               relative="org.eclipse.ui.views.ProblemView"
-               relationship="right"
-               ratio="0.5">
-         </view>
-      </perspectiveExtension>
+         <!-- Java perspective -->
+	      <perspectiveExtension
+	            targetID="org.eclipse.jdt.ui.JavaPerspective">
+	         <view
+	               id="com.mercedesbenz.sechub.views.SecHubReportView"
+	               relative="org.eclipse.ui.views.ProblemView"
+	               relationship="right"
+	               ratio="0.5">
+	         </view>
+	      </perspectiveExtension>
+	      <perspectiveExtension
+	            targetID="org.eclipse.jdt.ui.JavaPerspective">
+	         <view
+	               id="com.mercedesbenz.sechub.views.SecHubServerView"
+	               relative="org.eclipse.ui.navigator.ProjectExplorer"
+	               relationship="bottom"
+	               ratio="0.5">
+	         </view>
+	      </perspectiveExtension>
+ 		<!-- Java perspective -->
+	      <perspectiveExtension
+	            targetID="org.eclipse.ui.resourcePerspective">
+	         <view
+	               id="com.mercedesbenz.sechub.views.SecHubReportView"
+	               relative="org.eclipse.ui.views.ProblemView"
+	               relationship="right"
+	               ratio="0.5">
+	         </view>
+	      </perspectiveExtension>
+	      <perspectiveExtension
+	            targetID="org.eclipse.ui.resourcePerspective">
+	         <view
+	               id="com.mercedesbenz.sechub.views.SecHubServerView"
+	               relative="org.eclipse.ui.navigator.ProjectExplorer"
+	               relationship="bottom"
+	               ratio="0.5">
+	         </view>
+	      </perspectiveExtension>
    </extension>
    <extension
          point="org.eclipse.help.contexts">
@@ -168,7 +197,24 @@
 	    <super type="org.eclipse.core.resources.problemmarker"/>
 	    <persistent value="false"/>
 	</extension>
-	
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <!--                          DECORATION                                  -->
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+   <extension
+         point="org.eclipse.ui.decorators">
+     <decorator
+            lightweight="true"
+            adaptable="true"
+            label="SecHub server data decorator"
+            class="com.mercedesbenz.sechub.server.SechubServerTreeDecorator"
+            state="true"
+            location="BOTTOM_RIGHT"
+            id="com.mercedes.sechub.server.decorator">
+         <description>
+           	Decorator for all sechub server data elements
+         </description>
+      </decorator>
+   </extension>
 	
    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
    <!--        POPUP                                                         -->

@@ -9,9 +9,11 @@ public class SecureStorageAccess {
 	private ISecurePreferences preferences;
 	private ISecurePreferences node;
 	
+	private static final String SECURE_STORAGE_NODE = "sechubSecureStorage";
+	
 	public SecureStorageAccess() {
         preferences = SecurePreferencesFactory.getDefault();
-        node = preferences.node(PreferenceConstants.SECURE_STORAGE_NODE);
+        node = preferences.node(SECURE_STORAGE_NODE);
 	}
 	
 	public ISecurePreferences getSecurePreferences() {
@@ -19,17 +21,17 @@ public class SecureStorageAccess {
 	}
 
     public void storeSecureStorage(String username, String password) throws StorageException  {
-        node.put(PreferenceConstants.USERNAME_PREFERENCES_TEXT_FIELD, username, true);
-        node.put(PreferenceConstants.APITOKEN_PREFERENCES_TEXT_FIELD, password, true);
+        node.put(PreferenceIdConstants.USER_ID, username, true);
+        node.put(PreferenceIdConstants.APITOKEN, password, true);
     }
     
-    public String readSecureStorageUsername() throws StorageException {
-    	String username = node.get(PreferenceConstants.USERNAME_PREFERENCES_TEXT_FIELD, "Sechub Username");
+    public String getUserId() throws StorageException {
+    	String username = node.get(PreferenceIdConstants.USER_ID, "Sechub Username");
     	return username;
     }
     
-    public String readSecureStorageApitoken() throws StorageException {
-    	String apitoken = node.get(PreferenceConstants.APITOKEN_PREFERENCES_TEXT_FIELD, "Sechub ApiToken");
+    public String getApiToken() throws StorageException {
+    	String apitoken = node.get(PreferenceIdConstants.APITOKEN, "Sechub ApiToken");
     	return apitoken;
     }
 }
