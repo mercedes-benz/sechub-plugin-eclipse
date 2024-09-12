@@ -8,11 +8,11 @@ import org.eclipse.core.resources.IResource;
 public class SecHubStandardReportNamePatternPropertyTester extends PropertyTester {
 
 	public static final String PROPERTY_NAMESPACE = "com.mercedesbenz.sechub";
-	public static final String PROPERTY_IS_BASHFILE_WITHOUT_EXTENSION = "isSecHubReportFile";
+	public static final String PROPERTY_IS_SECHUB_REPORT_FILE = "isSecHubReportFile";
 
 	@Override
 	public boolean test(Object receiver, String property, Object[] args, Object expectedValue) {
-		if (!PROPERTY_IS_BASHFILE_WITHOUT_EXTENSION.equals(property)) {
+		if (!PROPERTY_IS_SECHUB_REPORT_FILE.equals(property)) {
 			return false;
 		}
 		if (!(receiver instanceof IFile)) {

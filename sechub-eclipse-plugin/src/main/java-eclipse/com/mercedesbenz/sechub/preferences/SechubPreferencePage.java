@@ -4,18 +4,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-
-import com.mercedesbenz.sechub.EclipseUtil;
 
 public class SechubPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage  {
 	
@@ -77,6 +73,12 @@ public class SechubPreferencePage extends FieldEditorPreferencePage implements I
 
 	 @Override
 	 public boolean performOk() {
+		 // ATTENTION: NEVER do super.performOk here ! Reason: The current implementation
+		 // uses userNameField and apiTokenField which hold the credentials inside UI
+		 // if we would do a super.performOk, the fields would store the sensitive data
+		 // plain to normal preferences.
+		 
+		 // TODO: Think about using extra SWT components here instead of preference fields
 		 try {
 			 validateServerURL();
 		 }catch (URISyntaxException e) {
