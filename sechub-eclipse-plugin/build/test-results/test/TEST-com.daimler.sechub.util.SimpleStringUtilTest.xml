@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.daimler.sechub.util.SimpleStringUtilTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-28T10:07:15" hostname="devtux" time="0.001">
-  <properties/>
-  <testcase name="removeAllSpaces_string_with_space_characters" classname="com.daimler.sechub.util.SimpleStringUtilTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

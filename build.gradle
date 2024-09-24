@@ -18,6 +18,7 @@ def doAutomateEclipseSetup = ['sechub-eclipse-other'];
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'java-library'
 	
 	if (doAutomateEclipseSetup.contains(project.name)){
 		apply plugin: 'eclipse'
@@ -29,27 +30,29 @@ subprojects {
 			    		}
 			   }	
 	}
-	apply plugin: "maven"
+//	apply plugin: "maven"
 		
 	/* Setup UTF-8 for compile AND test compilation*/
 	[ compileJava, compileTestJava ]*.options*.encoding = 'UTF-8'
 
-	sourceCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = '17'
+	targetCompatibility = '17'
 		
 		
 	dependencies{
 			
-		testCompile library.junit
-		testCompile library.mockito_all
+		testImplementation library.junit
+		testImplementation library.mockito_all
 	}
 	
 	task sourcesJar(type: Jar, dependsOn:classes) {
-		classifier = 'sources'
+		archiveClassifier = 'sources'
+		duplicatesStrategy = DuplicatesStrategy.INCLUDE
 		from sourceSets.main.allSource
 	}
 
 	task javadocJar(type: Jar, dependsOn:javadoc) {
-		classifier = 'javadoc'
+		archiveClassifier = 'javadoc'
 		from javadoc.destinationDir
 	}
 

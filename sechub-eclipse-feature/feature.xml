@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.daimler.sechub.feature"
+      id="com.mercedesbenz.sechub.feature"
       label="SecHub"
-      version="0.2.1"
-      provider-name="Daimler TSS GmbH">
+      version="0.3.0"
+      provider-name="Mercedes-Benz Tech Innovation GmbH">
 
-   <description url="https://github.com/daimler/sechub-plugin-eclipse">
+   <description url="https://github.com/mercedesbenz/sechub-plugin-eclipse">
       An eclipse plugin for SecHub
    </description>
 
-   <copyright url="https://github.com/Daimler/sechub-plugin-eclipse/blob/master/LICENSE">
+   <copyright url="https://github.com/mercedesbenz/sechub-plugin-eclipse/blob/master/LICENSE">
       MIT License
 
-Copyright (c) 2020 Daimler TSS GmbH
+Copyright (c) 2020 mercedesbenz TSS GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -33,10 +33,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
    </copyright>
 
-   <license url="https://github.com/Daimler/sechub-plugin-eclipse/blob/master/LICENSE">
+   <license url="https://github.com/mercedesbenz/sechub-plugin-eclipse/blob/master/LICENSE">
       MIT License
 
-Copyright (c) 2020 Daimler TSS GmbH
+Copyright (c) 2020 mercedesbenz TSS GmbH
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -58,10 +58,7 @@ SOFTWARE.
    </license>
 
    <plugin
-         id="com.daimler.sechub.plugin"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         id="com.mercedesbenz.sechub.plugin"
+         version="0.0.0"/>
 
 </feature>
